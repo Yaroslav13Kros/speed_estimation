@@ -1,4 +1,4 @@
-import RPi.Gpio as GPIO
+import RPi.GPIO as GPIO
 from time import sleep
 from enum import Enum
 
@@ -22,10 +22,3 @@ class Motor:
             self.pwm.start(0)
         else:
             print("Error: ena, in1, int2 should be int")
-
-
-    def getSpeed(self):
-
-
-
-
