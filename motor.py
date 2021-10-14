@@ -13,20 +13,37 @@ class Motor():
             GPIO.setup(self.__Ena, GPIO.OUT)
             GPIO.setup(self.__In1, GPIO.OUT)
             GPIO.setup(self.__In2, GPIO.OUT)
-            self.__pwm = GPIO.PWM(self.__Ena, 100)
+            self.__pwm = GPIO.PWM(self.__Ena, 500)
             self.__pwm.start(0)
+            self.__status = 0
+            self.__speed = 10
         else:
             print("Error: ena, in1, int2 should be int")
 
-    def moveF(self, speed = 50):
+    def moveF(self, speed = 10):
+        self.__speed = speed
         GPIO.output(self.__In1, GPIO.LOW)
         GPIO.output(self.__In2, GPIO.HIGH)
         self.__pwm.ChangeDutyCycle(speed)
+        self.__status = 1
 
-    def moveB(self, speed = 50):
+    def moveB(self, speed = 10):
+        self.__speed = speed
         GPIO.output(self.__In1, GPIO.HIGH)
         GPIO.output(self.__In2, GPIO.LOW)
         self.__pwm.ChangeDutyCycle(speed)
+        self.__status = 1
 
     def stop(self):
         self.__pwm.ChangeDutyCycle(0)
+        self.__status = 0
+        
+    def get_status(self):
+        return self.__status
+    
+    def get_speed(self):
+        return self.__speed
+    
+    def set_speed(self, speed):
+        self.__pwm.ChangeDutyCycle(speed)
+        
