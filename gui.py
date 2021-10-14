@@ -2,12 +2,41 @@ import numpy as np
 from tkinter import *
 import tkinter.font
 from motor import Motor
+from optical_sensor import OpticalSensor
+
+opt_sensor_front_right_counter = 0
+opt_sensor_back_right_counter = 0
+opt_sensor_front_left_counter = 0
+opt_sensor_back_left_counter = 0
+
+
+def opt_sensor_front_right_cb(key):
+    print("opt_sensor_front_right_cb")
+    opt_sensor_front_right_counter+= 1
+
+def opt_sensor_back_right_cb(key):
+    print("opt_sensor_back_right_cb")
+    opt_sensor_back_right_counter+= 1
+
+def opt_sensor_front_left_cb(key):
+    print("opt_sensor_front_left_cb")
+    opt_sensor_front_left_counter+= 1
+
+def opt_sensor_back_left_cb(key):
+    print("opt_sensor_back_left_cb")
+    opt_sensor_back_left_counter+= 1
 
 motor_front_right = Motor(22, 27, 17)
+opt_sensor_front_right = OpticalSensor(5)
+
 motor_back_right  = Motor(2, 4, 3)
+opt_sensor_back_right = OpticalSensor(10)
 
 motor_front_left  = Motor(25, 24, 23)
+opt_sensor_front_left = OpticalSensor(11)
+
 motor_back_left   = Motor(14, 15, 18)
+opt_sensor_back_left = OpticalSensor(9)
 
 btn_width = 14
 btn_height = 1

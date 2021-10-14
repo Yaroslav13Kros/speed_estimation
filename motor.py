@@ -20,14 +20,14 @@ class Motor():
         else:
             print("Error: ena, in1, int2 should be int")
 
-    def moveF(self, speed = 10):
+    def moveF(self, speed = 20):
         self.__speed = speed
         GPIO.output(self.__In1, GPIO.LOW)
         GPIO.output(self.__In2, GPIO.HIGH)
         self.__pwm.ChangeDutyCycle(speed)
         self.__status = 1
 
-    def moveB(self, speed = 10):
+    def moveB(self, speed = 20):
         self.__speed = speed
         GPIO.output(self.__In1, GPIO.HIGH)
         GPIO.output(self.__In2, GPIO.LOW)
