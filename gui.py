@@ -3,6 +3,11 @@ from tkinter import *
 import tkinter.font
 from motor import Motor
 from optical_sensor import OpticalSensor
+import matplotlib.pyplot as plt
+import datetime as dt
+import matplotlib.animation as animation
+import random
+import time
 
 opt_sensor_front_right_counter = 0
 opt_sensor_back_right_counter = 0
@@ -146,12 +151,76 @@ def SetSpeed():
     print(var_scale.get())
 
 s = tkinter.Scale(window, variable = var_scale, from_=0, to=100, orient=tkinter.HORIZONTAL, length=200, command=0)
-s.grid(row = 7, column = 0)
+s.grid(row = 7, column = 1)
 
 SetSpeedBtn = Button(window, text = "Set speed", font = myFont, command = SetSpeed, bg = 'bisque2', height = btn_height, width = btn_width)
-SetSpeedBtn.grid(row = 7, column = 1)
+SetSpeedBtn.grid(row = 7, column = 2)
 
+opt_sensor_front_right_var = StringVar()
+opt_sensor_back_right_var = StringVar()
+opt_sensor_front_left_var = StringVar()
+opt_sensor_back_left_var = StringVar()
 
+opt_sensor_front_right_lable = Label( window, textvariable=opt_sensor_front_right_var, relief=RAISED )
+opt_sensor_back_right_lable  = Label( window, textvariable=opt_sensor_back_right_var,  relief=RAISED )
+opt_sensor_front_left_lable  = Label( window, textvariable=opt_sensor_front_left_var,  relief=RAISED )
+opt_sensor_back_left_lable   = Label( window, textvariable=opt_sensor_back_left_var,   relief=RAISED )
 
+opt_sensor_front_right_var.set("MOTOR fr rpm:")
+opt_sensor_back_right_var.set("MOTOR br rpm:")
+opt_sensor_front_left_var.set("MOTOR fl rpm:")
+opt_sensor_back_left_var.set("MOTOR bl rpm:")
+
+opt_sensor_front_right_lable.grid(row = 4, column = 0)
+opt_sensor_back_right_lable.grid(row = 5, column = 0)
+opt_sensor_front_left_lable.grid(row = 6, column = 0)
+opt_sensor_back_left_lable.grid(row = 7, column = 0)
+
+def update_rpm():
+  
+    rpm_fr = opt_sensor_front_right.get_rpm()
+    rpm_br = opt_sensor_back_right.get_rpm()
+    rpm_fl = opt_sensor_front_left.get_rpm()
+    rpm_bl = opt_sensor_back_left.get_rpm()
+    
+    opt_sensor_front_right_var.set(f"MOTOR fr rpm: {str(rpm_fr)}")
+    opt_sensor_back_right_var.set(f"MOTOR br rpm:  {str(rpm_br)}")
+    opt_sensor_front_left_var.set(f"MOTOR fl rpm:  {str(rpm_fl)}")
+    opt_sensor_back_left_var.set(f"MOTOR bl rpm:   {str(rpm_bl)}")
+    
+    window.after(1000, update_rpm)
+    
+# Create figure for plotting
+fig = plt.figure()
+ax = fig.add_subplot(1, 1, 1)
+xs = []
+ys = []
+
+def animate(i, xs, ys):
+
+    # Read temperature (Celsius) from TMP102
+    rpm = opt_sensor_front_left.get_rpm()
+  # Add x and y to lists
+    xs.append(time.clock())
+    ys.append(rpm)
+
+    # Limit x and y lists to 20 items
+    xs = xs[-200:]
+    ys = ys[-200:]
+
+    # Draw x and y lists
+    ax.clear()
+    ax.plot(xs, ys)
+
+    # Format plot
+    plt.xticks(rotation=45, ha='right')
+    plt.subplots_adjust(bottom=0.30)
+    plt.title('TMP102 Temperature over Time')
+    plt.ylabel('RPM')
+
+# Set up plot to call animate() function periodically
+ani = animation.FuncAnimation(fig, animate, fargs=(xs, ys), interval=100)
+plt.show()
+window.after(1000, update_rpm)
 window.protocol("WM_DELETE_WINDOW", close_win)
 window.mainloop()
