@@ -191,36 +191,39 @@ def update_rpm():
     window.after(1000, update_rpm)
     
 # Create figure for plotting
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
-xs = []
-ys = []
+x_vals_t  = [0]
+y_vals_fr = [0]
+y_vals_br = [0]
+y_vals_fl = [0]
+y_vals_bl = [0]
+plt.style.use('fivethirtyeight')
+def animate(i):
+    # Add x and y to lists
+    x_vals_t.append(time.clock())
+    y_vals_fr.append(opt_sensor_front_right.get_rpm())
+    y_vals_br.append(opt_sensor_back_right.get_rpm())
+    y_vals_fl.append(opt_sensor_front_left.get_rpm())
+    y_vals_bl.append(opt_sensor_back_left.get_rpm())
 
-def animate(i, xs, ys):
 
-    # Read temperature (Celsius) from TMP102
-    rpm = opt_sensor_front_left.get_rpm()
-  # Add x and y to lists
-    xs.append(time.clock())
-    ys.append(rpm)
-
-    # Limit x and y lists to 20 items
-    xs = xs[-200:]
-    ys = ys[-200:]
-
-    # Draw x and y lists
-    ax.clear()
-    ax.plot(xs, ys)
+    plt.cla()
+    plt.plot(x_vals_t, y_vals_fr, label='Chennel fr')
+    plt.plot(x_vals_t, y_vals_br, label='Chennel br')
+    plt.plot(x_vals_t, y_vals_fl, label='Chennel fl')
+    plt.plot(x_vals_t, y_vals_bl, label='Chennel bl')
+    plt.legend(loc='upper left')
+    plt.tight_layout()
 
     # Format plot
     plt.xticks(rotation=45, ha='right')
     plt.subplots_adjust(bottom=0.30)
-    plt.title('TMP102 Temperature over Time')
+    plt.title('Wheel speed')
     plt.ylabel('RPM')
 
 # Set up plot to call animate() function periodically
-ani = animation.FuncAnimation(fig, animate, fargs=(xs, ys), interval=100)
+
+window.after(100, update_rpm)
+ani = animation.FuncAnimation(plt.gcf(), animate, interval=10)
 plt.show()
-window.after(1000, update_rpm)
 window.protocol("WM_DELETE_WINDOW", close_win)
 window.mainloop()

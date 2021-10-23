@@ -27,7 +27,7 @@ def animate(i, xs, ys):
     rpm = opt_sensor_front_left.get_rpm()
     rpm_reg = 0 + (set_rpm - set_rpm)*0.5
     # Add x and y to lists
-    xs.append(time.clock())
+    xs.append(time.process_time())
     ys.append(rpm)
 
     # Limit x and y lists to 20 items

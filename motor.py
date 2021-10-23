@@ -13,7 +13,7 @@ class Motor():
             GPIO.setup(self.__Ena, GPIO.OUT)
             GPIO.setup(self.__In1, GPIO.OUT)
             GPIO.setup(self.__In2, GPIO.OUT)
-            self.__pwm = GPIO.PWM(self.__Ena, 500)
+            self.__pwm = GPIO.PWM(self.__Ena, 100)
             self.__pwm.start(0)
             self.__status = 0
             self.__speed = 10
